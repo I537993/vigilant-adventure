@@ -1,16 +1,12 @@
 {
   "B4D_ZBW4": {
-    "object_owner" : {
-      "container_roles":[ "md::md_user"],
-      "container_roles":[ "sales::sales_user"],
-      "container_roles":[ "md::md_user_ktc"],
-      "container_roles":[ "sales::sales_user_ktc"]
-    },
-    "application_user": {
-      "container_roles":[ "md::md_user"],
-      "container_roles":[ "sales::sales_user"],
-      "container_roles":[ "md::md_user_ktc"],
-      "container_roles":[ "sales::sales_user_ktc"]
+    "object_owner": {
+      "container_roles": [
+        "md::md_user",
+        "sales::sales_user",
+        "md::md_user_ktc",
+        "sales::sales_user_ktc"
+      ]
     }
   }
 }
