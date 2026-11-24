@@ -1,0 +1,7 @@
+{  "CATALOGSERVICE_SYN_CV_C_RTL_GI_FULL_YEAR_REP": {
+    "target": {
+      "object":           "sales::CV_C_RTL_GI_FULL_YEAR_REP",
+      "schema.configure": "B4D_ZBW4/schema"
+    }
+  }
+}

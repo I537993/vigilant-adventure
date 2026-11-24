@@ -1,0 +1,67 @@
+_schema-version: "3.1"
+ID: kubota
+version: 1.0.0
+description: "A simple CAP project."
+parameters:
+  enable-parallel-deployments: true
+modules:
+  - name: kubota-srv
+    type: nodejs
+    path: gen/srv
+    parameters:
+      instances: 1
+      buildpack: sap_nodejs_buildpack
+    build-parameters:
+      builder: npm-ci
+    provides:
+      - name: srv-api # required by consumers of CAP services (e.g. approuter)
+        properties:
+          srv-url: ${default-url}
+    requires:
+      - name: kubota-db
+      - name: kubota-auth
+
+  - name: kubota-db-deployer
+    type: hdb
+    path: gen/db
+    parameters:
+      buildpack: sap_nodejs_buildpack
+    requires:
+      - name: kubota-db
+        properties:
+          TARGET_CONTAINER: ~{hdi-container-service-name}
+      - name: cross-container-service-1
+        group: SERVICE_REPLACEMENTS
+        properties:
+          key: B4D_ZBW4
+          service: ~{the-service-name}
+
+resources:
+  - name: cross-container-service-1
+    type: org.cloudfoundry.existing-service
+    parameters:
+      service-name: B4D_ZBW4
+    properties:
+      the-service-name: '${service-name}'
+
+  - name: kubota-db
+    type: com.sap.xs.hdi-container
+    parameters:
+      service: hana
+      service-plan: hdi-shared
+    properties:
+      hdi-container-service-name: ${service-name}
+
+  - name: kubota-auth
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: xsuaa
+      service-plan: default
+      path: ./xs-security.json
+      config:
+        xsappname: kubota-${org}-${space}
+        tenant-mode: dedicated
+        oauth2-configuration:
+          credential-types:
+            - "binding-secret"
+            - "x509"
